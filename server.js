@@ -3,9 +3,9 @@ const cors = require("cors");
 const multer = require("multer");
 const app = express();
 
-app.use(cors({origin: "*"}));
-app.use(express.json());
 app.use(express.static("public"));
+app.use(express.json());
+app.use(cors({origin: "*"}));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -181,7 +181,7 @@ let menu = [
     }
 ]
 
-app.get("/api/menu", (req, res)=>{
+app.get("/api/menu/", (req, res)=>{
     console.log("in get request")
     res.send(menu);
 });
@@ -195,7 +195,6 @@ app.get("/api/menu/:id", (req, res)=>{
 });
 
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is up and running on port ${PORT}`);
+app.listen(3001, () => {
+    console.log("Server is up and running");
 });
