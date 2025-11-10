@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const app = express();
-app.use(express.static("public"));
+
+app.use(cors({origin: "*"}));
 app.use(express.json());
-app.use(cors());
+app.use(express.static("public"));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -173,24 +174,28 @@ let menu = [
     {
         "_id":20,
         "name": "Apple Pie Pizza",
-        "img": "./pu/images/desserts/apple-pie.jpg",
+        "img": "/images/desserts/apple-pie.jpg",
         "type": "dessert",
         "description": "Pizza dough base with caramelized apples, brown sugar crumbles, and icing drizzle.",
         "price": "10" 
     }
 ]
 
-app.get("/api/menu/", (req, res)=>{
+app.get("/api/menu", (req, res)=>{
     console.log("in get request")
     res.send(menu);
 });
 
 app.get("/api/menu/:id", (req, res)=>{
-    const menu = menu.find((menu)=>menu._id === parseInt(req.params.id));
-    res.send(menu);
+    const item = menu.find((menu)=>menu._id === parseInt(req.params.id));
+    if (!item) {
+        return res.status(404).send("Item not found");
+    }
+    res.send(item);
 });
 
 
-app.listen(3001, () => {
-    console.log("Server is up and running");
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is up and running on port ${PORT}`);
 });
