@@ -1,5 +1,5 @@
 {
-  "name": "server-houses-fall-2025",
+  "name": "server-pizzas-fall-2025",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aweaver422/server-houses-fall-2025.git"
+    "url": "git+https://github.com/aweaver422/server-pizzas-fall-2025.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aweaver422/server-houses-fall-2025/issues"
+    "url": "https://github.com/aweaver422/server-pizzas-fall-2025/issues"
   },
-  "homepage": "https://github.com/aweaver422/server-houses-fall-2025#readme",
+  "homepage": "https://github.com/aweaver422/server-pizzas-fall-2025#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",

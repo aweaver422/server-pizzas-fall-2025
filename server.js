@@ -17,88 +17,177 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage });
 
-let houses = [
+let menu = [
     {
         "_id":1,
-        "name": "Farmhouse",
-        "size": 2000,
-        "bedrooms": 3,
-        "bathrooms": 2.5,
-        "features": [
-            "wrap around porch",
-            "attached garage"
-        ],
-        "main_image": "farm.webp",
-        "floor_plans": [
-            {
-                "name": "Main Level",
-                "image": "farm-floor1.webp"
-            },
-            {
-                "name": "Basement",
-                "image": "farm-floor2.webp"
-            }
-        ]
+        "name": "Parmesan Bread Bites",
+        "img": "/images/apps/bread-bites.jpg",
+        "type": "appetizer",
+        "description": "Bite-size pieces of bread coated with butter, parmesan, and garlic seasoning.",
+        "price": "6" 
     },
     {
         "_id":2,
-        "name": "Mountain House",
-        "size": 1700,
-        "bedrooms": 3,
-        "bathrooms": 2,
-        "features": [
-            "grand porch",
-            "covered deck"
-        ],
-        "main_image": "mountain-house.webp",
-        "floor_plans": [
-            {
-                "name": "Main Level",
-                "image": "mountain-house1.webp"
-            },
-            {
-                "name": "Optional Lower Level",
-                "image": "mountain-house2.webp"
-            },
-            {
-                "name": "Main Level Slab Option",
-                "image": "mountain-house3.jpg"
-            }
-        ]
+        "name": "Meatballs",
+        "img": "/images/apps/meatballs.jpg",
+        "type": "appetizer",
+        "description": "Pork meatballs covered with marinara sauce, parmesan, and garnish.",
+        "price": "8" 
     },
     {
         "_id":3,
-        "name": "Lake House",
-        "size": 3000,
-        "bedrooms": 4,
-        "bathrooms": 3,
-        "features": [
-            "covered deck",
-            "outdoor kitchen",
-            "pool house"
-        ],
-        "main_image": "farm.webp",
-        "floor_plans": [
-            {
-                "name": "Main Level",
-                "image": "lake-house1.webp"
-            },
-            {
-                "name": "Lower Level",
-                "image": "lake-house2.webp"
-            }
-        ]
+        "name": "House Salad",
+        "img": "/images/apps/salad.jpg",
+        "type": "appetizer",
+        "description": "Spring mix, tomatoes, red onions, bell pepper, and your choice of dressing: Ranch, Balsamic Vinagrette, Blue Cheese, or Italian.",
+        "price": "5" 
+    },
+    {
+        "_id":4,
+        "name": "Chicken Wings",
+        "img": "/images/apps/wings.png",
+        "type": "appetizer",
+        "description": "Six chicken wings coated in your choice of our housemade sauces: Buffalo, BBQ, Garlic Parmesan, Teriyaki, or Hot Honey.",
+        "price": "10" 
+    },
+    {
+        "_id":5,
+        "name": "Pepperoni",
+        "img": "/images/pizzas/pep.jpeg",
+        "type": "pizza",
+        "description": "Fresh mozzarella, parmesan, pepperoni.",
+        "price": "11" 
+    },
+    {
+        "_id":6,
+        "name": "Cheese",
+        "img": "/images/pizzas/cheese.jpg",
+        "type": "pizza",
+        "description": "Fresh mozzarella, parmesan.",
+        "price": "10" 
+    },
+    {
+        "_id":7,
+        "name": "Meat Lovers",
+        "img": "/images/pizzas/meat-lovers.png",
+        "type": "pizza",
+        "description": "Fresh mozzarella, bacon, pepperoni, sausage, hamburger.",
+        "price": "15" 
+    },
+    {
+        "_id":8,
+        "name": "Four Cheese",
+        "img": "/images/pizzas/four-cheese.png",
+        "type": "pizza",
+        "description": "Fresh mozzarella, parmesan, feta, and provolone.",
+        "price": "11" 
+    },
+    {
+        "_id":9,
+        "name": "Hamburger",
+        "img": "/images/pizzas/hamburger.png",
+        "type": "pizza",
+        "description": "Fresh mozzarella, ground beef, purple onions.",
+        "price": "14" 
+    },
+    {
+        "_id":10,
+        "name": "Margherita",
+        "img": "/images/pizzas/margherita.jpg",
+        "type": "pizza",
+        "description": "Fresh mozzarella, tomatoes, basil.",
+        "price": "12" 
+    },
+    {
+        "_id":11,
+        "name": "Shrimp Marinara",
+        "img": "/images/pizzas/shrimp-mari.jpg",
+        "type": "pizza",
+        "description": "Fresh mozzarella, sauteed shrimp, basil.",
+        "price": "16" 
+    },
+    {
+        "_id":12,
+        "name": "Chicken Fajita",
+        "img": "/images/pizzas/chicken-fajita.jpg",
+        "type": "pizza",
+        "description": "Fresh mozzarella, chicken, caramelized onions, bell peppers, sauteed mushroom.",
+        "price": "15" 
+    },
+    {
+        "_id":13,
+        "name": "Mediterranean",
+        "img": "/images/pizzas/mediterranean.jpg",
+        "type": "pizza",
+        "description": "Feta, black olives, pepperoncini, bell pepper, purple onion, tomatoes.",
+        "price": "14" 
+    },
+    {
+        "_id":14,
+        "name": "Philly Cheese Steak",
+        "img": "/images/pizzas/philly.png",
+        "type": "pizza",
+        "description": "Fresh mozzarella, steak, fresh onions, bell pepper.",
+        "price": "16" 
+    },
+    {
+        "_id":15,
+        "name": "Buffalo Chicken",
+        "img": "/images/pizzas/buffalo.png",
+        "type": "pizza",
+        "description": "Fresh mozzarella, chicken, purple onions, cheddar cheese, buffalo seasoning.",
+        "price": "14" 
+    },
+    {
+        "_id":16,
+        "name": "Spinach",
+        "img": "/images/pizzas/spinach.jpg",
+        "type": "pizza",
+        "description": "Feta, spinach, purple onions.",
+        "price": "11" 
+    },
+    {
+        "_id":17,
+        "name": "Slice of Cheesecake",
+        "img": "/images/desserts/cheesecake.jpg",
+        "type": "dessert",
+        "description": "Made from scratch, topped with fresh strawberries and drizzle.",
+        "price": "5" 
+    },
+    {
+        "_id":18,
+        "name": "Slice of Chocolate Cake",
+        "img": "/images/desserts/chocolate-cake.jpg",
+        "type": "dessert",
+        "description": "Made from scratch, three-layered chocolate cake with chocolate fudge icing.",
+        "price": "6" 
+    },
+    {
+        "_id":19,
+        "name": "S'mores Pizza",
+        "img": "/images/desserts/smores.png",
+        "type": "dessert",
+        "description": "Pizza dough base with chocolate, marshmallows, and crushed graham crackers.",
+        "price": "12" 
+    },
+    {
+        "_id":20,
+        "name": "Apple Pie Pizza",
+        "img": "./pu/images/desserts/apple-pie.jpg",
+        "type": "dessert",
+        "description": "Pizza dough base with caramelized apples, brown sugar crumbles, and icing drizzle.",
+        "price": "10" 
     }
 ]
 
-app.get("/api/houses/", (req, res)=>{
+app.get("/api/menu/", (req, res)=>{
     console.log("in get request")
-    res.send(houses);
+    res.send(menu);
 });
 
-app.get("/api/houses/:id", (req, res)=>{
-    const house = houses.find((house)=>house._id === parseInt(req.params.id));
-    res.send(house);
+app.get("/api/menu/:id", (req, res)=>{
+    const menu = menu.find((menu)=>menu._id === parseInt(req.params.id));
+    res.send(menu);
 });
 
 
