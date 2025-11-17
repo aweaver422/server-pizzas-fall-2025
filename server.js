@@ -221,7 +221,7 @@ app.post("/api/menu", upload.single("img"), (req, res) => {
         name,
         ingredients,
         type: "suggestion",
-        img: "http://localhost:3001/images/" + file.originalname
+        img: "https://server-pizzas-fall-2025.onrender.com/images/" + file.originalname
     };
 
     menu.push(newItem);
