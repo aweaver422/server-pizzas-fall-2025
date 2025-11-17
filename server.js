@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cors({
-  origin: ["https://aweaver422.github.io"], 
+  origin: ["http://localhost:3000"], 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -185,9 +185,17 @@ let menu = [
     }
 ]
 
-app.get("/api/menu/", (req, res)=>{
-    console.log("in get request")
-    res.send(menu);
+app.get("/api/menu", (req, res) => {
+    console.log("in get request");
+
+    const { type } = req.query;
+    let filteredMenu = menu;
+
+    if (type) {
+        filteredMenu = menu.filter(item => item.type === type);
+    }
+
+    res.send(filteredMenu);
 });
 
 app.get("/api/menu/:id", (req, res)=>{
@@ -196,6 +204,29 @@ app.get("/api/menu/:id", (req, res)=>{
         return res.status(404).send("Item not found");
     }
     res.send(item);
+});
+
+
+/* AI SOLUTION UNTIL I FIGURE OUT IF THERE'S ANOTHER WAY */
+app.post("/api/menu", upload.single("img"), (req, res) => {
+    const { name, ingredients } = req.body;
+    const file = req.file;
+
+    if (!name || !ingredients) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    const newItem = {
+        _id: menu.length ? menu[menu.length - 1]._id + 1 : 1,
+        name,
+        ingredients,
+        type: "suggestion",
+        img: "http://localhost:3001/images/" + file.originalname
+    };
+
+    menu.push(newItem);
+
+    res.status(200).json(menu); // return updated menu
 });
 
 
