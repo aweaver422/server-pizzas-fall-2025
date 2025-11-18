@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cors({
-  origin: ["http://localhost:3000, https://aweaver422.github.io"], 
+  origin: ["http://localhost:3000", "https://aweaver422.github.io"], 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
