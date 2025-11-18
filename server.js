@@ -226,7 +226,7 @@ app.post("/api/menu", upload.single("img"), (req, res) => {
 
     menu.push(newItem);
 
-    res.status(200).json(menu); // return updated menu
+    res.status(200).json(newItem); 
 });
 
 
