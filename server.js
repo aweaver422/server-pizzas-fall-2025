@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const app = express();
+const Joi = require("joi");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -229,6 +230,56 @@ app.post("/api/menu", upload.single("img"), (req, res) => {
     res.status(200).json(newItem); 
 });
 
+
+app.put("/api/menu/:id", upload.single("img"), (req, res)=>{
+    const item = menu.find(m => m._id === parseInt(req.params.id));
+
+     if(!item) {
+        res.status(404).send("The suggestion you wanted to edit is unavailable");
+        return;
+    }
+
+    const isValidUpdate = validateItem(req.body);
+
+    if(isValidUpdate.error){
+        console.log("Invalid Info");
+        res.status(400).send(isValidUpdate.error.details[0].message);
+        return;
+    }
+
+    item.name = req.body.name;
+    item.ingredients = req.body.ingredients;
+
+    if(req.file){
+        item.img = "/images/" + req.file.filename;
+    }
+
+    res.status(200).send(item);
+
+});
+
+app.delete("/api/menu/:id", (req,res)=>{
+    const item = menu.find(m => m._id === parseInt(req.params.id));
+    
+    if(!item) {
+        res.status(404).send("The suggestion you wanted to delete is unavailable");
+        return;
+    }
+
+    const index = menu.indexOf(item);
+    menu.splice(index, 1);
+    res.status(200).send(item);
+});
+
+const validateItem = (item) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        name:Joi.string().min(3).required(),
+        ingredients:Joi.string().min(3).required(),
+    });
+
+    return schema.validate(item);
+};
 
 app.listen(3001, () => {
     console.log("Server is up and running");
