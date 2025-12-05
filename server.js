@@ -220,8 +220,8 @@ app.get("/api/suggestions/", async(req, res) => {
 const validateSuggestion = (item) => {
     const schema = Joi.object({
         _id:Joi.allow(""),
-        name:Joi.string().min(3).required(),
-        ingredients:Joi.string().min(3).required(),
+        name:Joi.string().required(),
+        ingredients:Joi.string().required(),
     });
 
     return schema.validate(item);
@@ -249,7 +249,7 @@ app.post("/api/suggestions/", upload.single("img"), async(req, res) => {
     });
 
     if(req.file){
-        newSuggest.img = "https://server-pizzas-fall-2025.onrender.com/images/" + req.file.filename;
+        newSuggest.img = req.file.filename;
     }
 
     const saved = await newSuggest.save();
