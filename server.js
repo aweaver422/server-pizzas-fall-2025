@@ -217,6 +217,16 @@ app.get("/api/suggestions/", async(req, res) => {
     res.send(all);
 });
 
+const validateSuggestion = (item) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        name:Joi.string().min(3).required(),
+        ingredients:Joi.string().min(3).required(),
+    });
+
+    return schema.validate(item);
+};
+
 app.post("/api/suggestions/", upload.single("img"), async(req, res) => {
     /*const { name, ingredients } = req.body;
     const file = req.file;
@@ -247,7 +257,7 @@ app.post("/api/suggestions/", upload.single("img"), async(req, res) => {
 });
 
 app.put("/api/suggestions/:id", upload.single("img"), async(req, res)=>{
-    const isValidUpdate = validateItem(req.body);
+    const isValidUpdate = validateSuggestion(req.body);
 
     if(isValidUpdate.error){
         console.log("Invalid Info");
@@ -284,15 +294,6 @@ app.delete("/api/suggestions/:id", async(req,res)=>{
     res.status(200).send(item);
 });
 
-const validateItem = (item) => {
-    const schema = Joi.object({
-        _id:Joi.allow(""),
-        name:Joi.string().min(3).required(),
-        ingredients:Joi.string().min(3).required(),
-    });
-
-    return schema.validate(item);
-};
 
 app.listen(3001, () => {
     console.log("Server is up and running");
