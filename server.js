@@ -270,7 +270,7 @@ app.put("/api/suggestions/:id", upload.single("img"), async(req, res)=>{
     }
 
     if(req.file){
-        fieldsToUpdate.img = "https://server-pizzas-fall-2025.onrender.com/images/" + req.file.filename;
+        fieldsToUpdate.img = req.file.filename;
     }
 
     const success = await Suggestions.updateOne({_id:req.params.id}, fieldsToUpdate);
