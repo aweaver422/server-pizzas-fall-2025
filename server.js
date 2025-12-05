@@ -3,6 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const app = express();
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -21,7 +22,7 @@ const storage = multer.diskStorage({
     },
   });
   
-  const upload = multer({ storage: storage });
+    const upload = multer({ storage: storage });
 
 let menu = [
     {
@@ -186,88 +187,100 @@ let menu = [
     }
 ]
 
+
+//calling menu
 app.get("/api/menu", (req, res) => {
-    console.log("in get request");
+    console.log("in get request for menu");
+    res.send(menu);
 
-    const { type } = req.query;
-    let filteredMenu = menu;
-
-    if (type) {
-        filteredMenu = menu.filter(item => item.type === type);
-    }
-
-    res.send(filteredMenu);
-});
-
-app.get("/api/menu/:id", (req, res)=>{
-    const item = menu.find((menu)=>menu._id === parseInt(req.params.id));
-    if (!item) {
-        return res.status(404).send("Item not found");
-    }
-    res.send(item);
 });
 
 
-/* AI SOLUTION UNTIL I FIGURE OUT IF THERE'S ANOTHER WAY */
-app.post("/api/menu", upload.single("img"), (req, res) => {
-    const { name, ingredients } = req.body;
+/*      SUGGESTION ADDITIONS        */
+mongoose
+    .connect("mongodb+srv://aweaver422:Chance411@cluster0.aawgtio.mongodb.net/")
+    .then(() => console.log("Connected to mongodb..."))
+    .catch((err) => console.error("could not connect ot mongodb...", err));
+
+const suggestionSchema = new mongoose.Schema({
+    name: String,
+    ingredients: String,
+    img: String
+});
+
+const Suggestions = mongoose.model("Suggestions", suggestionSchema);
+
+//calling suggestions
+app.get("/api/suggestions/", async(req, res) => {
+    console.log("in get request for suggestions");
+    const all = await Suggestions.find();
+    res.send(all);
+});
+
+app.post("/api/suggestions/", upload.single("img"), async(req, res) => {
+    /*const { name, ingredients } = req.body;
     const file = req.file;
 
     if (!name || !ingredients) {
         return res.status(400).send("Missing required fields");
-    }
+    }*/
+    console.log(req.body);
+    const isValidSuggestion = validateSuggestion(req.body);
 
-    const newItem = {
-        _id: menu.length ? menu[menu.length - 1]._id + 1 : 1,
-        name,
-        ingredients,
-        type: "suggestion",
-        img: "https://server-pizzas-fall-2025.onrender.com/images/" + file.originalname
-    };
-
-    menu.push(newItem);
-
-    res.status(200).json(newItem); 
-});
-
-
-app.put("/api/menu/:id", upload.single("img"), (req, res)=>{
-    const item = menu.find(m => m._id === parseInt(req.params.id));
-
-     if(!item) {
-        res.status(404).send("The suggestion you wanted to edit is unavailable");
+    if(isValidSuggestion.error){
+        console.log("Invalid suggestion");
+        res.status(400).send(isValidSuggestion.error.details[0].message);
         return;
     }
 
+    const newSuggest = new Suggestions({
+        name:req.body.name,
+        ingredients:req.body.ingredients,
+    });
+
+    if(req.file){
+        newSuggest.img = "https://server-pizzas-fall-2025.onrender.com/images/" + req.file.filename;
+    }
+
+    const saved = await newSuggest.save();
+    res.status(200).send(saved);
+});
+
+app.put("/api/suggestions/:id", upload.single("img"), async(req, res)=>{
     const isValidUpdate = validateItem(req.body);
 
     if(isValidUpdate.error){
         console.log("Invalid Info");
-        res.status(400).send(isValidUpdate.error.details[0].message);
-        return;
+        return res.status(400).send(isValidUpdate.error.details[0].message);
     }
 
-    item.name = req.body.name;
-    item.ingredients = req.body.ingredients;
+    const fieldsToUpdate = {
+        name : req.body.name,
+        ingredients: req.body.ingredients,
+    }
 
     if(req.file){
-        item.img = "/images/" + req.file.filename;
+        fieldsToUpdate.img = "https://server-pizzas-fall-2025.onrender.com/images/" + req.file.filename;
     }
 
+    const success = await Suggestions.updateOne({_id:req.params.id}, fieldsToUpdate);
+    
+    if(!success) {
+        return res.status(404).send("The suggestion you wanted to edit is unavailable");
+    }
+
+    const item = await Suggestions.findById(req.params.id);
     res.status(200).send(item);
 
 });
 
-app.delete("/api/menu/:id", (req,res)=>{
-    const item = menu.find(m => m._id === parseInt(req.params.id));
-    
+app.delete("/api/suggestions/:id", async(req,res)=>{
+    const item = await Suggestions.findByIdAndDelete(req.params.id);
+
     if(!item) {
         res.status(404).send("The suggestion you wanted to delete is unavailable");
         return;
     }
-
-    const index = menu.indexOf(item);
-    menu.splice(index, 1);
     res.status(200).send(item);
 });
 
